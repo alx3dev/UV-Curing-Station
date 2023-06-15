@@ -34,10 +34,9 @@ class DigitalSwitch {
         timer = use_timer;
         pause = pause_time * 1000;
 
+        pinMode(pin, mode);
         if (mode == OUTPUT) {
-            pinMode(pin, mode);
-        } else if (mode == INPUT) {
-            pinMode(pin, mode);
+            turnOFF();
         }
     }
 
