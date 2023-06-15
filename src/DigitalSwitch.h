@@ -20,30 +20,30 @@ class DigitalSwitch {
         byte dutyCycle = 204;
 
         bool timer;
-        unsigned long pause;
+        unsigned long cycle;
         unsigned long triggered = 0UL;
 
     DigitalSwitch(byte switch_pin, byte switch_on = ACTIVE_HIGH, 
-                  bool use_timer = false, int pause_time = 600)
+                  bool use_timer = false, int cycle_time = 600)
     {
         pin = switch_pin;
         activeSignal = switch_on;
 
         timer = use_timer;
-        pause = pause_time * 1000;
+        cycle = cycle_time * 1000;
 
         pinMode(pin, OUTPUT);
         turnOFF();
     }
 
-    void pwm(bool state = true, byte cycle = 204) {
+    void pwm(bool state = true, byte rate = 204) {
         isPWM = state;
-        dutyCycle = cycle;
-        if (isON && isPWM) { pulse(cycle); }
+        dutyCycle = rate;
+        if (isON && isPWM) { pulse(rate); }
     }
 
-    void pulse(byte cycle) {
-        analogWrite(pin, cycle);
+    void pulse(byte rate) {
+        analogWrite(pin, rate);
     }
     
     void turnON() {
@@ -63,7 +63,7 @@ class DigitalSwitch {
 
     void autoOFF() {
         if (timer && isON) {
-            if (millis() - triggered > pause) { turnOFF(); }
+            if (millis() - triggered > cycle) { turnOFF(); }
         }
     }
   };

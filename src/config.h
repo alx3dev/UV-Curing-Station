@@ -10,8 +10,8 @@ const char* PASS = "NETWORK-PASSWORD";
 #define MotorPin 1
 #define MotorPWM 25.5
 
-//#define ButtonPin_0 4
-//#define ButtonPin_1 5
+//#define ButtonPin_0 2
+//#define ButtonPin_1 4
 
 #include <station.h>
 

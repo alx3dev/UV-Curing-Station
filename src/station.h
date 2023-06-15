@@ -38,6 +38,6 @@ void uvs_autoOFF() {
 void uvs_setTimer(bool count = true, int sec = 0) {
     Led.timer = count;
     if (sec > 0) {
-        Led.pause = sec * 1000;
+        Led.cycle = sec * 1000;
     }
 }
