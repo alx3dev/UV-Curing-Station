@@ -14,7 +14,7 @@
 #endif
 
 
-#if defined(ESP_8266) || defined(ESP_32)
+#ifdef WIFI
     String resp;
 
     void handleRoot() {
@@ -27,12 +27,17 @@
         resp = "UV Cycle Started\n";
         resp += "UV Power: " + Led.dutyCycle*100/255;
         resp += "%\n";
-        resp += "Motor Speed: " + Motor.dutyCycle*100/255;
-        resp += "%\n";
+
+        #ifdef MotorMosfetPin
+            resp += "Motor Speed: " + Motor.dutyCycle*100/255;
+            resp += "%\n";
+        #endif
+
         if (Led.timer) {
             resp += "Cycle Time: " + Led.pause/1000;
             resp += " sec";
         }
+
         server.send(200, "text/plain", resp);
     }
 

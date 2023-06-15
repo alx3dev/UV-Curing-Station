@@ -16,8 +16,8 @@ class DigitalSwitch {
 
     public:
         bool isON = false;
-        byte dutyCycle = 204; // 80%
         bool isPWM = false;
+        byte dutyCycle = 204;
 
         bool timer;
         unsigned long pause;
