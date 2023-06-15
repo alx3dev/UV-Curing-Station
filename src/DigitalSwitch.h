@@ -12,12 +12,10 @@ class DigitalSwitch {
 
     private:
         byte pin;
-        byte mode = OUTPUT;
         byte activeSignal;   // HIGH or LOW
 
-        bool isON = false;
-
     public:
+        bool isON = false;
         byte dutyCycle = 204; // 80%
         bool isPWM = false;
 
@@ -25,7 +23,7 @@ class DigitalSwitch {
         unsigned long pause;
         unsigned long triggered = 0UL;
 
-    DigitalSwitch(byte switch_pin, const byte mode = OUTPUT, byte switch_on = ACTIVE_HIGH, 
+    DigitalSwitch(byte switch_pin, byte switch_on = ACTIVE_HIGH, 
                   bool use_timer = false, int pause_time = 600)
     {
         pin = switch_pin;
@@ -34,10 +32,8 @@ class DigitalSwitch {
         timer = use_timer;
         pause = pause_time * 1000;
 
-        pinMode(pin, mode);
-        if (mode == OUTPUT) {
-            turnOFF();
-        }
+        pinMode(pin, OUTPUT);
+        turnOFF();
     }
 
     void pwm(bool state = true, byte cycle = 204) {
