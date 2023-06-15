@@ -1,6 +1,6 @@
 #include <DigitalSwitch.h>
 
-DigitalSwitch Led( LedMosfetPin, OUTPUT, ACTIVE_HIGH, AUTO_OFF, 600 );
+DigitalSwitch Led( LedMosfetPin, ACTIVE_HIGH, AUTO_OFF, 600 );
 DigitalSwitch Motor( MotorMosfetPin );
 
 void uvsON() {
