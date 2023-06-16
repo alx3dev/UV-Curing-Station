@@ -15,35 +15,40 @@
 
 
 #ifdef WIFI
+    void updateSettings(String arg) {
+        if (arg == "cycle")
+        {
+            Led.cycle = arg.toInt();
+        }
+        else if (arg == "power")
+        {
+            Led.pwm(arg.toFloat());
+        }
+        else if (arg == "speed")
+        {
+            #ifdef MotorPin
+                Motor.pwm(arg.toInt());
+            #endif
+        }
+    }
+
     void handleRoot() {
         server.send(200, "text/plain", "Wireless UV Station");
     }
 
     void handleStart() {
-        server.on("/start", []() {
-            String arg;
-            
-            for (int x = 0; x < server.args(); x++) {
-                arg = server.arg(x);
+        for (int x = 0; x < server.args(); x++) {
+            updateSettings(server.arg(x));
+        }
+        uvsON();
+        server.send(200, "text/plain", "Curing cycle started");
+    }
 
-                if (arg == "cycle")
-                {
-                    Led.cycle = arg.toInt();
-                }
-                else if (arg == "power")
-                {
-                    Led.pwm(arg.toFloat());
-                }
-                else if (arg == "speed")
-                {
-                    #ifdef MotorPin
-                        Motor.pwm(arg.toInt());
-                    #endif
-                }
-            }
-            uvsON();
-            server.send(200, "text/plain", "Curing cycle started.");
-        });
+    void handleUpdate() {
+        for (int x = 0; x < server.args(); x++) {
+            updateSettings(server.arg(x));
+        }
+        server.send(200, "text/plain", "Controls Updated");
     }
 
     void handleStop() {
@@ -64,11 +69,13 @@
         WiFi.mode(WIFI_STA);
         WiFi.begin(SSID, PASS);
 
-        server.onNotFound(handleNotFound);
         server.on("/", handleRoot);
         server.on("/start", handleStart);
+        server.on("/update", handleUpdate);
         server.on("/stop", handleStop);
-        server.on("/disable-timer", handleTimerDisable);
+        server.on("/timer-disable", handleTimerDisable);
+
+        server.onNotFound(handleNotFound);  
         server.begin();
     }
 #endif
