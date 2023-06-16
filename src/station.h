@@ -19,13 +19,13 @@ void buttons_init(byte mode = INPUT_PULLUP) {
 
 void uvsON() {
     Led.turnON();
-    #ifdef MotorMosfetPin
+    #ifdef MotorPin
         Motor.turnON();
     #endif
 }
 
 void uvsOFF() {
-    #ifdef MotorMosfetPin
+    #ifdef MotorPin
         Motor.turnOFF();
     #endif
     Led.turnOFF();

@@ -15,11 +15,12 @@ class DigitalSwitch {
         byte activeSignal;   // HIGH or LOW
 
     public:
-        bool isON = false;
-        bool isPWM = false;
-        byte dutyCycle = 204;
-
+        float dutyCycle;
+        bool isPWM;
+        
+        bool isON;
         bool timer;
+
         unsigned long cycle;
         unsigned long triggered = 0UL;
 
@@ -29,6 +30,9 @@ class DigitalSwitch {
         pin = switch_pin;
         activeSignal = switch_on;
 
+        isON = false;
+        isPWM = false;
+
         timer = use_timer;
         cycle = cycle_time * 1000;
 
@@ -36,13 +40,13 @@ class DigitalSwitch {
         turnOFF();
     }
 
-    void pwm(bool state = true, byte rate = 204) {
+    void pwm(bool state = true, float rate = 204) {
         isPWM = state;
         dutyCycle = rate;
         if (isON && isPWM) { pulse(rate); }
     }
 
-    void pulse(byte rate) {
+    void pulse(float rate) {
         analogWrite(pin, rate);
     }
     
