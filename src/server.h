@@ -15,30 +15,35 @@
 
 
 #ifdef WIFI
-    String resp;
-
     void handleRoot() {
         server.send(200, "text/plain", "Wireless UV Station");
     }
 
     void handleStart() {
-        uvsON();
+        server.on("/start", []() {
+            String arg;
+            
+            for (int x = 0; x < server.args(); x++) {
+                arg = server.arg(x);
 
-        resp = "UV Cycle Started\n";
-        resp += "UV Power: " + Led.dutyCycle*100/255;
-        resp += "%\n";
-
-        #ifdef MotorMosfetPin
-            resp += "Motor Speed: " + Motor.dutyCycle*100/255;
-            resp += "%\n";
-        #endif
-
-        if (Led.timer) {
-            resp += "Cycle Time: " + Led.pause/1000;
-            resp += " sec";
-        }
-
-        server.send(200, "text/plain", resp);
+                if (arg == "cycle")
+                {
+                    Led.cycle = arg.toInt();
+                }
+                else if (arg == "power")
+                {
+                    Led.pwm(arg.toFloat());
+                }
+                else if (arg == "speed")
+                {
+                    #ifdef MotorPin
+                        Motor.pwm(arg.toInt());
+                    #endif
+                }
+            }
+            uvsON();
+            server.send(200, "text/plain", "Curing cycle started.");
+        });
     }
 
     void handleStop() {
