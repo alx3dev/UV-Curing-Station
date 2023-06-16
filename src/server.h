@@ -61,6 +61,11 @@
         server.send(200, "text/plain", "Timer Disabled");
     }
 
+    void handleTimerEnable() {
+        uvs_setTimer();
+        server.send(200, "text/plain", "Timer Enabled");
+    }
+
     void handleNotFound() {
         server.send(404, "text/plain", "");
     }
@@ -74,6 +79,7 @@
         server.on("/update", handleUpdate);
         server.on("/stop", handleStop);
         server.on("/timer-disable", handleTimerDisable);
+        server.on("/timer-enable", handleTimerEnable);
 
         server.onNotFound(handleNotFound);  
         server.begin();
