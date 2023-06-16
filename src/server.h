@@ -15,20 +15,25 @@
 
 
 #ifdef WIFI
-    void updateSettings(String arg) {
-        if (arg == "cycle")
-        {
-            Led.cycle = arg.toInt();
-        }
-        else if (arg == "power")
-        {
-            Led.pwm(arg.toFloat());
-        }
-        else if (arg == "speed")
-        {
-            #ifdef MotorPin
-                Motor.pwm(arg.toInt());
-            #endif
+    void updateSettings() {
+        for (int x = 0; x < server.args(); x++) {
+            String opt = server.argName(x);
+            String arg = server.arg(x);
+            
+            if (opt == "cycle")
+            {
+                Led.cycle = arg.toInt();
+            }
+            else if (opt == "power")
+            {
+                Led.pwm(arg.toFloat());
+            }
+            else if (opt == "speed")
+            {
+                #ifdef MotorPin
+                    Motor.pwm(arg.toInt());
+                #endif
+            }
         }
     }
 
@@ -37,17 +42,13 @@
     }
 
     void handleStart() {
-        for (int x = 0; x < server.args(); x++) {
-            updateSettings(server.arg(x));
-        }
+        updateSettings();
         uvsON();
         server.send(200, "text/plain", "Curing cycle started");
     }
 
     void handleUpdate() {
-        for (int x = 0; x < server.args(); x++) {
-            updateSettings(server.arg(x));
-        }
+        updateSettings();
         server.send(200, "text/plain", "Controls Updated");
     }
 

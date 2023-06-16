@@ -6,10 +6,6 @@
 
 
 void setup() {
-    #ifdef WIFI
-        server_init();
-    #endif
-
     #ifdef BUTTONS
         buttons_init();
     #endif
@@ -20,6 +16,10 @@ void setup() {
 
     #ifdef MotorPWM
         Motor.pwm(MotorPWM);
+    #endif
+
+    #ifdef WIFI
+        server_init();
     #endif
 }
 
