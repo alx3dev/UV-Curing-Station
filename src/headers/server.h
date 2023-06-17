@@ -68,7 +68,7 @@
     }
 
     void handleNotFound() {
-        server.send(404, "text/plain", "");
+        server.send(404, "text/plain", "Error 404");
     }
 
     // Initialize WiFi and server, handle request/response.

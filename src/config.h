@@ -18,14 +18,14 @@ const char* PASS = "NETWORK-PASSWORD";
 //#define Button1Pin 4
 #define Button1Mode INPUT
 
-#include <station.h>
+#include <headers/station.h>
 
 #if defined(ButtonPin) || defined(Button1Pin)
     #define BUTTONS
-    #include <buttons.h>
+    #include <headers/buttons.h>
 #endif
 
 #if defined(ESP_8266) || defined(ESP_32)
     #define WIFI
-    #include <server.h>
+    #include <headers/server.h>
 #endif
