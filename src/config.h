@@ -1,16 +1,23 @@
-#define ESP_8266    // define board chip
+// ** Configuration for UV Station ** //
+
+// Define board chip
+#define ESP_8266    
 //#define ESP_32
 
+// Network (or AP) credentials
 const char* SSID = "NETWORK-NAME";
 const char* PASS = "NETWORK-PASSWORD";
 
+// UV Led pin
 #define LedPin 3
-// default power, uncomment to disable pwm
+
+// Default power, uncomment to disable led PWM
 #define LedPWM 204
 
-// uncomment if motor is not connected
+// Uncomment if motor is not connected
 #define MotorPin 1
-// default speed, uncomment to disable pwm
+
+// Default speed, uncomment to disable motor PWM
 #define MotorPWM 25.5
 
 // TO-DO: enable buttons

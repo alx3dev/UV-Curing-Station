@@ -1,5 +1,8 @@
 #ifndef UVS
-    #include <Arduino.h>
+    #ifndef Arduino_h
+        #include <Arduino.h>
+    #endif
+    
     #include <config.h>
     #define UVS
 #endif
@@ -14,7 +17,7 @@ void setup() {
         Led.pwm(LedPWM);
     #endif
 
-    #ifdef MotorPWM
+    #if defined(MotorPin) && defined(MotorPWM)
         Motor.pwm(MotorPWM);
     #endif
 

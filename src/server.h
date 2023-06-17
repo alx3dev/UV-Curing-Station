@@ -14,24 +14,24 @@
 #endif
 
 
+// Handle requests only if Espressif boards are used
 #ifdef WIFI
+
+    // Get and set control values from server request
     void updateSettings() {
         for (int x = 0; x < server.args(); x++) {
-            String opt = server.argName(x);
-            String arg = server.arg(x);
-            
-            if (opt == "cycle")
+            if (server.argName(x) == "cycle")
             {
-                Led.cycle = arg.toInt();
+                Led.cycle = server.arg(x).toInt();
             }
-            else if (opt == "power")
+            else if (server.argName(x) == "power")
             {
-                Led.pwm(arg.toFloat());
+                Led.pwm(server.arg(x).toFloat());
             }
-            else if (opt == "speed")
+            else if (server.argName(x) == "speed")
             {
                 #ifdef MotorPin
-                    Motor.pwm(arg.toInt());
+                    Motor.pwm(server.arg(x).toInt());
                 #endif
             }
         }
@@ -71,6 +71,7 @@
         server.send(404, "text/plain", "");
     }
 
+    // Initialize WiFi and server, handle request/response.
     void server_init() {
         WiFi.mode(WIFI_STA);
         WiFi.begin(SSID, PASS);
