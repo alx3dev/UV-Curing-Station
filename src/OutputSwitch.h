@@ -8,8 +8,8 @@
 #define AUTO_OFF true
 
 // Wrap all the methods needed for output switch into a single class.
-// Support PWM (analogWrite), and timer for automatic turn-off.
-class DigitalSwitch {
+// Support PWM (with analogWrite), and timer for automatic turn-off.
+class OutputSwitch {
 
     private:
         byte pin;
@@ -29,7 +29,7 @@ class DigitalSwitch {
     // Initialize given pin as output, driven by active-high or active-low sig.
     // Enable auto-off timer and cycle time in seconds.
     //
-    DigitalSwitch(byte switch_pin, byte switch_on = ACTIVE_HIGH, 
+    OutputSwitch(byte switch_pin, byte switch_on = ACTIVE_HIGH, 
                   bool use_timer = false, int cycle_time = 600)
     {
         pin = switch_pin;
