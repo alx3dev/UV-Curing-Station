@@ -75,9 +75,11 @@ class OutputSwitch {
         isON ? turnOFF() : turnON();
     }
 
-    void autoOFF() {
+    bool autoOFF() {
         if (timer && isON) {
             if (millis() - triggered > cycle) { turnOFF(); }
+            return true;
         }
+        return false;
     }
   };
