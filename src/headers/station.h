@@ -1,9 +1,9 @@
 #include <headers/OutputSwitch.h>
 
-OutputSwitch Led( LedPin, ACTIVE_HIGH, AUTO_OFF, 600 );
+OutputSwitch Led( LedPin, LedActive, true, 600 );
 
 #ifdef MotorPin
-    OutputSwitch Motor( MotorPin );
+    OutputSwitch Motor( MotorPin, MotorActive );
 #endif
 
 void uvsON() {
@@ -23,7 +23,9 @@ void uvsOFF() {
 // Use only Led data for time tracking,
 // no point of running motor without light.
 void uvs_autoOFF() {
-    Led.autoOFF();
+    if (Led.autoOFF()) {
+        Motor.turnOFF();
+    }
 }
 
 // Enable/Disable timer.  
