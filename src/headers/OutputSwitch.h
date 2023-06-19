@@ -2,11 +2,6 @@
     #include <Arduino.h>
 #endif
 
-#define ACTIVE_HIGH 1
-#define ACTIVE_LOW 0
-
-#define AUTO_OFF true
-
 // Wrap all the methods needed for output switch into a single class.
 // Support PWM (with analogWrite), and timer for automatic turn-off.
 class OutputSwitch {
@@ -29,7 +24,7 @@ class OutputSwitch {
     // Initialize given pin as output, driven by active-high or active-low sig.
     // Enable auto-off timer and cycle time in seconds.
     //
-    OutputSwitch(byte switch_pin, byte switch_on = ACTIVE_HIGH, 
+    OutputSwitch(byte switch_pin, byte switch_on = HIGH, 
                   bool use_timer = false, int cycle_time = 600)
     {
         pin = switch_pin;
