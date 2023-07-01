@@ -66,10 +66,9 @@ class OutputSwitch {
         isON ? turnOFF() : turnON();
     }
 
-    bool autoOFF() {
+    bool isCounting() {
         if (isTimer && isON) {
-            if (millis() - triggered > cycle) { turnOFF(); }
-            return true;
+            if (millis() - triggered > cycle) { return true; }
         }
         return false;
     }
