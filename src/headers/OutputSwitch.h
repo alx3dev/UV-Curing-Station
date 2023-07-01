@@ -7,39 +7,41 @@
 class OutputSwitch {
 
     private:
-        byte pin;
-        byte activeSignal;   // HIGH or LOW
+        uint8_t pin;
+        uint8_t activeSignal;   // HIGH or LOW
 
     public:
         // firmware should use a real values, GUI should care about percents.
-        float dutyCycle;
+        float dutyCycle = 0;
 
-        bool isON;  // track swtich state
-        bool isPWM; // use pwm, or full ON/OFF?
-        bool timer; // automatic turn-off?
+        bool isPWM = false; // use pwm, or full ON/OFF?
+        bool isTimer = false; // automatic turn-off?
+        bool isON  = false; // track swtich state
 
-        unsigned long cycle;  // how long to keep switch ON?
-        unsigned long triggered = 0UL;  // keep track of switch-on time
+        uint64_t cycle; // how long to keep switch ON?
+        uint64_t triggered = 0; // keep track of switch-on time
 
     // Initialize given pin as output, driven by active-high or active-low sig.
-    // Enable auto-off timer and cycle time in seconds.
+    // Set cycle time in seconds to enable auto-off (0 mean timer is disabled).
     //
-    OutputSwitch(byte switch_pin, byte switch_on = HIGH, 
-                  bool use_timer = false, int cycle_time = 600)
+    OutputSwitch(uint8_t sw_pin, uint8_t sw_on = HIGH, uint32_t sw_cycle = 0)
     {
-        pin = switch_pin;
-        activeSignal = switch_on;
+        pin = sw_pin;
+        activeSignal = sw_on;
 
-        isON = false;
-        isPWM = false;
-
-        timer = use_timer;
-        cycle = cycle_time * 1000;
+        if (sw_cycle > 0) {
+            isTimer = true;
+            cycle = sw_cycle * 1000;
+        }
 
         pinMode(pin, OUTPUT);
         turnOFF();
     }
 
+    void pulse(float rate) {
+        analogWrite(pin, rate);
+    }
+    
     // Enable/disable switch PWM, and set duty cycle value.
     // Activate pulses only if switch state is already ON.
     void pwm(bool state = true, float rate = 204) {
@@ -48,12 +50,6 @@ class OutputSwitch {
         if (isON && isPWM) { pulse(rate); }
     }
 
-    // Do not check if PWM is enabled.
-    // Purpose is to allow pwm while turnON() still go to full power.
-    void pulse(float rate) {
-        analogWrite(pin, rate);
-    }
-    
     // Call analogWrite only if PWM is enabled.
     void turnON() {
         isPWM ? pulse(dutyCycle) : digitalWrite(pin, activeSignal);
@@ -71,7 +67,7 @@ class OutputSwitch {
     }
 
     bool autoOFF() {
-        if (timer && isON) {
+        if (isTimer && isON) {
             if (millis() - triggered > cycle) { turnOFF(); }
             return true;
         }
