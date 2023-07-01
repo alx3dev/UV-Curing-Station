@@ -19,16 +19,21 @@
 
     // Get and set control values from server request
     void updateSettings() {
+        String opt;
+
         for (int x = 0; x < server.args(); x++) {
-            if (server.argName(x) == "cycle")
+            opt = server.argName(x);
+            opt.toLowerCase();
+
+            if (opt == "cycle")
             {
                 Led.cycle = server.arg(x).toInt();
             }
-            else if (server.argName(x) == "power")
+            else if (opt == "power")
             {
                 Led.pwm(server.arg(x).toFloat());
             }
-            else if (server.argName(x) == "speed")
+            else if (opt == "speed")
             {
                 #ifdef MotorPin
                     Motor.pwm(server.arg(x).toInt());
