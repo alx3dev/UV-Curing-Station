@@ -1,6 +1,6 @@
 #include <headers/OutputSwitch.h>
 
-OutputSwitch Led( LedPin, LedActive, true, 600 );
+OutputSwitch Led( LedPin, LedActive, 600 );
 
 #ifdef MotorPin
     OutputSwitch Motor( MotorPin, MotorActive );
@@ -23,15 +23,13 @@ void uvsOFF() {
 // Use only Led data for time tracking,
 // no point of running motor without light.
 void uvs_autoOFF() {
-    if (Led.autoOFF()) {
-        Motor.turnOFF();
-    }
+    if (Led.isCounting()) { uvsOFF(); }
 }
 
 // Enable/Disable timer.  
 // Set/Update curing cycle time (in seconds).
 void uvs_setTimer(bool count = true, int sec = 0) {
-    Led.timer = count;
+    Led.isTimer = count;
     if (sec > 0) {
         Led.cycle = sec * 1000;
     }
