@@ -8,17 +8,18 @@
 class InputSwitch {
 
     private:
-        byte pin;
-        byte mode;
-        byte type;
+        uint8_t pin;
+        uint8_t mode;
+        uint8_t type;
+
+        unsigned long pressed, prevPressed, released = 0UL;
+
 
     public:
         bool isPressed, isReleased = false;
         bool isDoublePress, isLongPress = false;
 
-        unsigned long pressed, prevPressed, released = 0UL;
-
-    InputSwitch(byte in_pin, byte in_mode = INPUT, byte in_type = NC) {
+    InputSwitch(uint8_t in_pin, uint8_t in_mode = INPUT, uint8_t in_type = NC) {
         pin = in_pin;
         mode = in_mode;
         type = in_type;
