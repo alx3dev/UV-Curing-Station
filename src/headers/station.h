@@ -23,7 +23,7 @@ void uvsOFF() {
 // Use only Led data for time tracking,
 // no point of running motor without light.
 void uvs_autoOFF() {
-    if (Led.isCounting()) { uvsOFF(); }
+    if (Led.expired()) { uvsOFF(); }
 }
 
 // Enable/Disable timer.  

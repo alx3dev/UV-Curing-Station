@@ -44,7 +44,7 @@ class OutputSwitch {
     
     // Enable/disable switch PWM, and set duty cycle value.
     // Activate pulses only if switch state is already ON.
-    void pwm(bool state = true, float rate = 204) {
+    void pwm(bool state = true, float rate = 0) {
         isPWM = state;
         dutyCycle = rate;
         if (isON && isPWM) { pulse(rate); }
@@ -66,7 +66,7 @@ class OutputSwitch {
         isON ? turnOFF() : turnON();
     }
 
-    bool isCounting() {
+    bool expired() {
         if (isTimer && isON) {
             if (millis() - triggered > cycle) { return true; }
         }
