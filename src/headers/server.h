@@ -81,6 +81,8 @@
         WiFi.mode(WIFI_STA);
         WiFi.begin(SSID, PASS);
 
+        while (WiFi.status() != WL_CONNECTED) { delay(100); }
+
         server.on("/", handleRoot);
         server.on("/start", handleStart);
         server.on("/update", handleUpdate);
