@@ -72,3 +72,5 @@ class OutputSwitch {
         }
     }
 };
+
+#define OutputSwitch_h

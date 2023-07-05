@@ -2,8 +2,9 @@
     #include <Arduino.h>
 #endif
 
-#include <config.h>
-
+#ifndef Config_h
+    #include <config.h>
+#endif
 
 void setup() {
     #ifdef BUTTONS

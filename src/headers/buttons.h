@@ -1,6 +1,8 @@
 #ifdef BUTTONS
-    #include <headers/InputSwitch.h>
-
+    #ifndef InputSwitch_h
+        #include <headers/InputSwitch.h>
+    #endif
+    
     // Depending on your board and wiring, you may want to
     // initialize buttons with INPUT_PULLUP or INPUT_PULLDOWN
     void buttons_init() {

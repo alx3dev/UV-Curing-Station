@@ -1,4 +1,6 @@
-#include <headers/OutputSwitch.h>
+#ifndef OutputSwitch_h
+    #include <headers/OutputSwitch.h>
+#endif
 
 OutputSwitch Led( LedPin, LedActive, 600 );
 

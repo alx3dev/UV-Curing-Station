@@ -38,3 +38,5 @@ const char* PASS = "NETWORK-PASSWORD";
     #define WIFI
     #include <headers/server.h>
 #endif
+
+#define Config_h

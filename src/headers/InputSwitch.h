@@ -58,3 +58,5 @@ class InputSwitch {
         longPressed(false);
     }
 };
+
+#define InputSwitch_h
