@@ -12,11 +12,11 @@ void setup() {
     #endif
     
     #ifdef LedPWM
-        Led.pwm(LedPWM);
+        UVS::Led.pwm(LedPWM);
     #endif
 
     #if defined(MotorPin) && defined(MotorPWM)
-        Motor.pwm(MotorPWM);
+        UVS::Motor.pwm(MotorPWM);
     #endif
 
     #ifdef WIFI

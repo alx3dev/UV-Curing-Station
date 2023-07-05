@@ -2,13 +2,13 @@
     #include <headers/OutputSwitch.h>
 #endif
 
-OutputSwitch Led( LedPin, LedActive, 600 );
-
-#ifdef MotorPin
-    OutputSwitch Motor( MotorPin, MotorActive );
-#endif
-
 namespace UVS {
+
+    OutputSwitch Led( LedPin, LedActive, 600 );
+
+    #ifdef MotorPin
+        OutputSwitch Motor( MotorPin, MotorActive );
+    #endif
 
     void on() {
         Led.on();

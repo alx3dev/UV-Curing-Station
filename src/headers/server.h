@@ -27,16 +27,16 @@
 
             if (opt == "cycle")
             {
-                Led.cycle = server.arg(x).toInt();
+                UVS::Led.cycle = server.arg(x).toInt();
             }
             else if (opt == "power")
             {
-                Led.pwm(server.arg(x).toFloat());
+                UVS::Led.pwm(server.arg(x).toFloat());
             }
             else if (opt == "speed")
             {
                 #ifdef MotorPin
-                    Motor.pwm(server.arg(x).toFloat());
+                    UVS::Motor.pwm(server.arg(x).toFloat());
                 #endif
             }
         }
