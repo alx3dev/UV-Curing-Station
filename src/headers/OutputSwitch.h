@@ -70,6 +70,7 @@ class OutputSwitch {
         if (isTimer && isON) {
             return millis() - triggered > cycle ? true : false;
         }
+        return false;
     }
 };
 
