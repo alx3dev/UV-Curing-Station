@@ -15,8 +15,7 @@ class InputSwitch {
         unsigned long pressed_m, prevPressed_m, released_m = 0UL;
 
     public:
-        bool isPressed, isReleased = false;
-        bool isDoublePressed, isLongPressed = false;
+        bool isPressed, isLongPressed, isReleased = false;
 
     InputSwitch(uint8_t in_pin, uint8_t in_mode = INPUT, uint8_t in_type = NC) {
         pin = in_pin;
@@ -33,9 +32,7 @@ class InputSwitch {
     void handleISR() {
         if (inputActive()) {
             pressed();
-            prevPressed_m = pressed_m;
             pressed_m = millis();
-            isDoublePressed = pressed_m - prevPressed_m < 500 ? true : false;
         } else {
             released();
             released_m = millis();
