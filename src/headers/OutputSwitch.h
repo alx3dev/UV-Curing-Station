@@ -35,7 +35,7 @@ class OutputSwitch {
         }
 
         pinMode(pin, OUTPUT);
-        turnOFF();
+        off();
     }
 
     void pulse(float rate) {
@@ -51,25 +51,24 @@ class OutputSwitch {
     }
 
     // Call analogWrite only if PWM is enabled.
-    void turnON() {
+    void on() {
         isPWM ? pulse(dutyCycle) : digitalWrite(pin, activeSignal);
         triggered = millis();
         isON = true;
     }
 
-    void turnOFF() {
+    void off() {
         digitalWrite(pin, !activeSignal);
         isON = false;
     }
   
     void trigger() {
-        isON ? turnOFF() : turnON();
+        isON ? off() : on();
     }
 
     bool expired() {
         if (isTimer && isON) {
-            if (millis() - triggered > cycle) { return true; }
+            return millis() - triggered > cycle ? true : false;
         }
-        return false;
     }
-  };
+};

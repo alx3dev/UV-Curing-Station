@@ -1,11 +1,8 @@
-#ifndef UVS
-    #ifndef Arduino_h
-        #include <Arduino.h>
-    #endif
-    
-    #include <config.h>
-    #define UVS
+#ifndef Arduino_h
+    #include <Arduino.h>
 #endif
+
+#include <config.h>
 
 
 void setup() {
@@ -31,5 +28,5 @@ void loop() {
         server.handleClient();
     #endif
 
-    uvs_autoOFF();
+    UVS::autoOFF();
 }

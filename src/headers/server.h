@@ -36,7 +36,7 @@
             else if (opt == "speed")
             {
                 #ifdef MotorPin
-                    Motor.pwm(server.arg(x).toInt());
+                    Motor.pwm(server.arg(x).toFloat());
                 #endif
             }
         }
@@ -48,7 +48,7 @@
 
     void handleStart() {
         updateSettings();
-        uvsON();
+        UVS::on();
         server.send(200, "text/plain", "Curing cycle started");
     }
 
@@ -58,17 +58,17 @@
     }
 
     void handleStop() {
-        uvsOFF();
+        UVS::off();
         server.send(200, "text/plain", "Cycle stopped");
     }
 
     void handleTimerDisable() {
-        uvs_setTimer(false);
+        UVS::setTimer(false);
         server.send(200, "text/plain", "Timer Disabled");
     }
 
     void handleTimerEnable() {
-        uvs_setTimer();
+        UVS::setTimer();
         server.send(200, "text/plain", "Timer Enabled");
     }
 

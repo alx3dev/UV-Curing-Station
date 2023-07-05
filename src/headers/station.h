@@ -6,31 +6,34 @@ OutputSwitch Led( LedPin, LedActive, 600 );
     OutputSwitch Motor( MotorPin, MotorActive );
 #endif
 
-void uvsON() {
-    Led.turnON();
-    #ifdef MotorPin
-        Motor.turnON();
-    #endif
-}
+namespace UVS {
 
-void uvsOFF() {
-    #ifdef MotorPin
-        Motor.turnOFF();
-    #endif
-    Led.turnOFF();
-}
+    void on() {
+        Led.on();
+        #ifdef MotorPin
+            Motor.on();
+        #endif
+    }
 
-// Use only Led data for time tracking,
-// no point of running motor without light.
-void uvs_autoOFF() {
-    if (Led.expired()) { uvsOFF(); }
-}
+    void off() {
+        #ifdef MotorPin
+            Motor.off();
+        #endif
+        Led.off();
+    }
 
-// Enable/Disable timer.  
-// Set/Update curing cycle time (in seconds).
-void uvs_setTimer(bool count = true, int sec = 0) {
-    Led.isTimer = count;
-    if (sec > 0) {
-        Led.cycle = sec * 1000;
+    // Use only Led data for time tracking,
+    // no point of running motor without light.
+    void autoOFF() {
+        if (Led.expired()) { off(); }
+    }
+
+    // Enable/Disable timer.  
+    // Set/Update curing cycle time (in seconds).
+    void setTimer(bool count = true, int sec = 0) {
+        Led.isTimer = count;
+        if (sec > 0) {
+            Led.cycle = sec * 1000;
+        }
     }
 }
