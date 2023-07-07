@@ -25,18 +25,20 @@ class InputSwitch {
         pinMode(pin, mode);
     }
 
-    bool inputActive() {
+    bool inputActive()
+    {
         return digitalRead(pin) == type;
     }
 
-    void handleISR() {
+    void handleISR()
+    {
         if (inputActive()) {
             pressed();
             pressed_m = millis();
         } else {
             released();
             released_m = millis();
-            isLongPressed = released_m - pressed_m > 800 ? true : false;
+            longPressed(released_m - pressed_m > 800);
         }
     }
 
@@ -44,14 +46,12 @@ class InputSwitch {
 
     void released(bool status = true) { isReleased = status; }
 
-    void doublePressed(bool status = true) { isDoublePressed = status; }
-
     void longPressed(bool status = true) { isLongPressed = status; }
 
-    void resetStatus() {
+    void resetStatus()
+    {
         pressed(false);
         released(false);
-        doublePressed(false);
         longPressed(false);
     }
 };

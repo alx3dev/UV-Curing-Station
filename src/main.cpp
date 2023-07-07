@@ -6,25 +6,13 @@
     #include <config.h>
 #endif
 
-void setup() {
-    #ifdef BUTTONS
-        buttons_init();
-    #endif
-    
-    #ifdef LedPWM
-        UVS::Led.pwm(LedPWM);
-    #endif
-
-    #if defined(MotorPin) && defined(MotorPWM)
-        UVS::Motor.pwm(MotorPWM);
-    #endif
-
-    #ifdef WIFI
-        server_init();
-    #endif
+void setup()
+{
+    UVS::init();
 }
 
-void loop() {
+void loop()
+{
     #ifdef WIFI
         server.handleClient();
     #endif
