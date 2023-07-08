@@ -1,7 +1,7 @@
 // ** Configuration for UV Station ** //
 
-//#define ESP_8266 // Define board chip
-#define ESP_32
+#define ESP_8266 // Define board chip
+//#define ESP_32
 
 // Network credentials
 const char* SSID = "NETWORK-NAME";
