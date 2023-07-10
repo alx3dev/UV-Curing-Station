@@ -12,7 +12,7 @@ class InputSwitch {
         uint8_t mode;
         uint8_t type;
 
-        unsigned long pressed_m, prevPressed_m, released_m = 0UL;
+        unsigned long pressed_m, released_m = 0UL;
 
     public:
         bool isPressed, isLongPressed, isReleased = false;
@@ -48,7 +48,7 @@ class InputSwitch {
 
     void longPressed(bool status = true) { isLongPressed = status; }
 
-    void resetStatus()
+    void statusReset()
     {
         pressed(false);
         released(false);
