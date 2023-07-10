@@ -8,14 +8,13 @@ class OutputSwitch {
 
     private:
         uint8_t  pin;
-        uint8_t  activeSignal;      // HIGH or LOW
-        uint32_t cycle_ms;          // how long to keep switch ON?
-        uint32_t triggered_ms = 0;  // keep track of switch-on time
+        uint8_t  activeSignal;  // HIGH or LOW
+        uint32_t cycle_ms;      // how long to keep switch ON?
+        uint32_t triggered_ms;  // keep track of switch-on time
+
+        float dutyCycle = 0;    // GUI should care about percents.
 
     public:
-        // firmware should use a real values, GUI should care about percents.
-        float dutyCycle = 0;
-
         bool isPWM   = false;   // use pwm, or full ON/OFF?
         bool isTimer = false;   // automatic turn-off?
         bool isON    = false;   // track swtich state
@@ -31,7 +30,7 @@ class OutputSwitch {
 
         if (sw_cycle > 0) {
             isTimer = true;
-            setTimer(sw_cycle);
+            setTimer(true, sw_cycle);
         }
         
         pinMode(pin, OUTPUT);    
@@ -42,7 +41,7 @@ class OutputSwitch {
     void pwm_init(uint8_t pwm_ch = 0, uint8_t pwm_res = 10, uint16_t pwm_freq_hz = 5000, float pwm_dc = 0)
     {
         isPWM = true;
-        dutyCycle = pwm_dc;
+        pwm(pwm_dc);
 
         #ifdef ESP8266
             analogWriteResolution(pwm_res);
@@ -56,10 +55,13 @@ class OutputSwitch {
     }
 
     // Set value for duty cycle, or update if already ON.
-    void power(float duty_cycle)
+    float pwm(float dc)
     {
-        dutyCycle = duty_cycle;
-        if (isON && isPWM) { pulse(duty_cycle); }
+        if (dc >= 0) {
+            dutyCycle = dc;
+            if (isON && isPWM)  { pulse(dc); };
+        }
+        return dutyCycle;
     }
 
     // Modulate pulse based on defined board
@@ -72,17 +74,25 @@ class OutputSwitch {
         #endif
     }
 
+    void activate() {
+        digitalWrite(pin, activeSignal);
+    }
+
+    void deactivate() {
+        digitalWrite(pin, !activeSignal);
+    }
+
     // Call analogWrite only if PWM is enabled.
     void on()
     {
-        isPWM ? pulse(dutyCycle) : digitalWrite(pin, activeSignal);
+        isPWM ? pulse(dutyCycle) : activate();
         triggered_ms = millis();
         isON = true;
     }
 
     void off()
     {
-        digitalWrite(pin, !activeSignal);
+        deactivate();
         isON = false;
     }
   
@@ -91,26 +101,26 @@ class OutputSwitch {
         isON ? off() : on();
     }
 
+    // Enable/Disable cycle timer
     void setTimer(bool status = true, uint16_t sec = 0)
     {
         isTimer = status;
         if (sec > 0) { cycle_ms = sec * 1000; }
     }
 
-    uint16_t cycleTime() {
+    uint16_t cycleTime()
+    {
         return cycle_ms / 1000;
     }
 
-    uint32_t elapsed() {
+    uint32_t elapsed()
+    {
         return millis() - triggered_ms;
     }
 
     bool expired()
     {
-        if (isTimer && isON) {
-            return elapsed() > cycle_ms ? true : false;
-        }
-        return false;
+        return isTimer && isON && (elapsed() > cycle_ms) ? true : false;
     }
 };
 

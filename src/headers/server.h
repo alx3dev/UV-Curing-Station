@@ -36,12 +36,12 @@
             }
             else if (opt == "power")
             {
-                UVS::Led.power(server.arg(x).toFloat());
+                UVS::Led.pwm(server.arg(x).toFloat());
             }
             else if (opt == "speed")
             {
                 #ifdef MotorPin
-                    UVS::Motor.power(server.arg(x).toFloat());
+                    UVS::Motor.pwm(server.arg(x).toFloat());
                 #endif
             }
         }
