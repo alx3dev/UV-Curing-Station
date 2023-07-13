@@ -24,8 +24,7 @@ namespace UVS {
         WebServer server(80);
     #endif
 
-    // Get and set control values from server request
-    void updateSettings()
+    void updateSettingsFromRequest()
     {
         String opt;
 
@@ -57,14 +56,14 @@ namespace UVS {
 
     void handleStart()
     {
-        updateSettings();
+        updateSettingsFromRequest();
         On();
         server.send(200, "text/plain", "Curing cycle started");
     }
 
     void handleUpdate()
     {
-        updateSettings();
+        updateSettingsFromRequest();
         server.send(200, "text/plain", "Controls Updated");
     }
 
@@ -98,20 +97,24 @@ namespace UVS {
     // Initialize WiFi and server, handle request/response.
     void server_init()
     {
-        WiFi.mode(WIFI_MODE);
+        WiFi.mode(UVS_WIFI_MODE);
 
-        switch (WIFI_MODE) {
-        case 1:
+        switch (UVS_WIFI_MODE) {
+    
+        case WIFI_STA:
             WiFi.begin(STA_SSID, STA_PASS);
             while (WiFi.status() != WL_CONNECTED) { delay(100); }
 
-        case 2:
+        case WIFI_AP:
             WiFi.softAP(AP_SSID, AP_PASS);
 
-        case 3:
+        case WIFI_AP_STA:
             WiFi.softAP(AP_SSID, AP_PASS);
             WiFi.begin(STA_SSID, STA_PASS);
             while (WiFi.status() != WL_CONNECTED) { delay(100); }
+
+        case WIFI_OFF:
+            return void(1);
         }
 
         server.on("/", handleRoot);

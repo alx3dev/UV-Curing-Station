@@ -2,16 +2,10 @@
   #include <Arduino.h>
 #endif
 
-#include "./config.h"
-#include "./headers/station.h"
-
-#ifdef WIFI
-  #include "./headers/server.h"
-#endif
-
-#ifdef BUTTONS
-  #include "./headers/buttons.h"
-#endif
+#include <config.h>
+#include <headers/station.h>
+#include <headers/server.h>
+#include <headers/buttons.h>
 
 
 void setup()
@@ -20,6 +14,10 @@ void setup()
 
 #ifdef WIFI
     UVS::server_init();
+#endif
+
+#ifdef BUTTONS
+    UVS::buttons_init();
 #endif
 }
 
