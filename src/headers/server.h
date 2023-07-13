@@ -100,13 +100,19 @@ namespace UVS {
     {
         WiFi.mode(WIFI_MODE);
 
-        if (WIFI_MODE == WIFI_STA) {
+        switch (WIFI_MODE) {
+        case 1:
             WiFi.begin(STA_SSID, STA_PASS);
-        } else {
-            WiFi.begin(AP_SSID, AP_PASS);
-        }
+            while (WiFi.status() != WL_CONNECTED) { delay(100); }
 
-        while (WiFi.status() != WL_CONNECTED) { delay(100); }
+        case 2:
+            WiFi.softAP(AP_SSID, AP_PASS);
+
+        case 3:
+            WiFi.softAP(AP_SSID, AP_PASS);
+            WiFi.begin(STA_SSID, STA_PASS);
+            while (WiFi.status() != WL_CONNECTED) { delay(100); }
+        }
 
         server.on("/", handleRoot);
         server.on("/start", handleStart);

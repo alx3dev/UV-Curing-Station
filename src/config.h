@@ -6,13 +6,15 @@
 //#define ESP_32
 
 
-#define WIFI_MODE WIFI_STA      // WiFi mode, station or access point
+// WiFi mode - station, access point or both (WIFI_STA, WIFI_AP, WIFI_AP_STA)
+#define WIFI_MODE WIFI_STA
 
 const char* STA_SSID = "ssid";  // Local network name
 const char* STA_PASS = "pass";  // Local network password
 
 const char* AP_SSID = "";       // ESP Access Point name
 const char* AP_PASS = "";       // ESP Access Point password
+
 
 #define LedPin 3
 #define LedPWM 204              // Default power, comment line to disable led PWM
