@@ -7,25 +7,22 @@
 class OutputSwitch {
 
 private:
-    uint8_t  pin;
-    uint8_t  activeSignal;  // HIGH or LOW
+    const uint8_t pin;
+    const uint8_t activeSignal; // HIGH or LOW
 
-    float dutyCycle = 0.0f; // GUI should care about percents.
+    float dutyCycle = 0.0f;     // GUI should care about percents.
 
 public:
     bool PWM = false;       // use pwm, or full ON/OFF?
 
-    OutputSwitch(uint8_t sw_pin, uint8_t sw_active_sig = HIGH)
+    OutputSwitch(uint8_t sw_pin, uint8_t sw_active_sig = HIGH) : pin(sw_pin), activeSignal(sw_active_sig)
     {
-        pin = sw_pin;
-        activeSignal = sw_active_sig;
-        
         pinMode(pin, OUTPUT);    
         off();
     }
 
     // Set PWM channel, resolution, frequency and duty cycle.
-    void pwm_init(uint8_t pwm_ch = 0, uint8_t pwm_res = 10, uint32_t pwm_freq_hz = 5000, float pwm_dc = 0.f)
+    void pwm_init(uint8_t pwm_ch, uint8_t pwm_res, uint32_t pwm_freq_hz, float pwm_dc)
     {
     #ifdef ESP8266
         analogWriteResolution(pwm_res);
