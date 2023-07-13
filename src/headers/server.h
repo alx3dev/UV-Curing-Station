@@ -1,25 +1,28 @@
-#ifdef ESP_8266
+#if defined(ESP_8266)
     #include <ESP8266WiFi.h>
     #include <WiFiClient.h>
     #include <ESP8266WebServer.h>
     #include <ESP8266mDNS.h>
-    
-    ESP8266WebServer server(80);
 #endif
 
-
-#ifdef ESP_32
+#ifdef ESP32
     #include <WiFi.h>
     #include <WiFiClient.h>
     #include <ESPmDNS.h>
     #include <WebServer.h>
-    
-    WebServer server(80);
-    // TO-DO
 #endif
 
-
 #ifdef WIFI
+
+namespace UVS {
+
+    #ifdef ESP_8266
+        ESP8266WebServer server(80);
+    #endif
+
+    #ifdef ESP32
+        WebServer server(80);
+    #endif
 
     // Get and set control values from server request
     void updateSettings()
@@ -32,18 +35,18 @@
 
             if (opt == "cycle")
             {
-                UVS::Led.setTimer(server.arg(x).toInt());
+                cycleTimer(server.arg(x).toInt());
             }
             else if (opt == "power")
             {
-                UVS::Led.pwm(server.arg(x).toFloat());
+                Led.pwm(server.arg(x).toFloat());
             }
+        #ifdef MotorPin
             else if (opt == "speed")
             {
-                #ifdef MotorPin
-                    UVS::Motor.pwm(server.arg(x).toFloat());
-                #endif
+                Motor.pwm(server.arg(x).toFloat());
             }
+        #endif
         }
     }
 
@@ -55,7 +58,7 @@
     void handleStart()
     {
         updateSettings();
-        UVS::on();
+        On();
         server.send(200, "text/plain", "Curing cycle started");
     }
 
@@ -67,19 +70,23 @@
 
     void handleStop()
     {
-        UVS::off();
+        Off();
         server.send(200, "text/plain", "Cycle stopped");
     }
 
     void handleTimerDisable()
     {
-        UVS::setTimer(false);
+        cycleTimer(false);
         server.send(200, "text/plain", "Timer Disabled");
     }
 
     void handleTimerEnable()
     {
-        UVS::setTimer();
+        if (server.argName(0) == "cycle") {
+            cycleTimer(server.arg(0).toInt());
+        } else {
+            cycleTimer();
+        }
         server.send(200, "text/plain", "Timer Enabled");
     }
 
@@ -91,8 +98,13 @@
     // Initialize WiFi and server, handle request/response.
     void server_init()
     {
-        WiFi.mode(WIFI_STA);
-        WiFi.begin(SSID, PASS);
+        WiFi.mode(WIFI_MODE);
+
+        if (WIFI_MODE == WIFI_STA) {
+            WiFi.begin(STA_SSID, STA_PASS);
+        } else {
+            WiFi.begin(AP_SSID, AP_PASS);
+        }
 
         while (WiFi.status() != WL_CONNECTED) { delay(100); }
 
@@ -106,4 +118,5 @@
         server.onNotFound(handleNotFound);  
         server.begin();
     }
+}
 #endif

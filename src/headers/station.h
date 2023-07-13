@@ -1,64 +1,85 @@
-#ifndef OutputSwitch_h
-    #include <headers/OutputSwitch.h>
-#endif
+#define Station_h
+
+#include "./OutputSwitch.h"
 
 namespace UVS {
+    
+    OutputSwitch Led( LedPin, LedActive );
 
-    OutputSwitch Led( LedPin, LedActive, 600 );
+#ifdef MotorPin
+    OutputSwitch Motor( MotorPin, MotorActive );
+#endif
 
-    #ifdef MotorPin
-        OutputSwitch Motor( MotorPin, MotorActive );
-    #endif
+    bool isActive;
+    bool cycle_timer;
+
+    uint32_t cycle_ms;
+    uint32_t triggered_ms;
 
     // All settings goes here, to be called in setup()
     void init()
     {
-        #ifdef BUTTONS
-            buttons_init();
-        #endif
-    
-        #ifdef LedPWM
-            Led.pwm_init(0, 8, 5000, LedPWM);
-        #endif
+    #ifdef BUTTONS
+        buttons_init();
+    #endif
 
-        #if defined(MotorPin) && defined(MotorPWM)
-            Motor.pwm_init(0, 8, 5000, MotorPWM);
-        #endif
+    #ifdef LedPWM
+        Led.pwm_init(0, 8, 5000, LedPWM);
+    #endif
 
-        #ifdef WIFI
-            server_init();
-        #endif
+    #if defined(MotorPin) && defined(MotorPWM)
+        Motor.pwm_init(0, 8, 5000, MotorPWM);
+    #endif
     }
 
-    // Turn station ON    
-    void on()
+    // Turn station ON
+    void On()
     {
+        isActive = true;
         Led.on();
-        #ifdef MotorPin
-            Motor.on();
-        #endif
+
+    #ifdef MotorPin
+        Motor.on();
+    #endif
+
+        triggered_ms = millis();
     }
 
     // Turn station OFF
-    void off()
+    void Off()
     {
-        #ifdef MotorPin
-            Motor.off();
-        #endif
+        isActive = false;
         Led.off();
+
+    #ifdef MotorPin
+        Motor.off();
+    #endif
     }
 
-    // Use only Led data for time tracking,
-    // no point of running motor without light.
-    void autoOFF()
+    // Enable/Disable timer.
+    // Set cycle time in seconds.
+    // Get current settings.
+    uint32_t cycleTimer(bool status = true, uint16_t sec = 0)
     {
-        if (Led.expired()) { off(); }
+        cycle_timer = status;
+        if (sec > 0) {
+            cycle_ms = sec * 1000;
+        }
+
+        return cycle_ms;
     }
 
-    // Enable/Disable timer.  
-    // Set/Update curing cycle time (in seconds).
-    void setTimer(bool status = true, uint16_t sec = 0)
+    uint32_t elapsed()
     {
-        Led.setTimer(status, sec);
+        return isActive ? uint32_t(millis() - triggered_ms) : 0;
+    }
+
+    bool curingCycle()
+    {
+        if (cycle_timer && (elapsed() > cycle_ms)) {
+            Off();
+            return true;
+        }
+        return false;
     }
 }
