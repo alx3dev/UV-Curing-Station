@@ -19,16 +19,12 @@ namespace UVS {
     // All settings goes here, to be called in setup()
     void init()
     {
-    #ifdef BUTTONS
-        buttons_init();
-    #endif
-
     #ifdef LedPWM
-        Led.pwm_init(0, 8, 5000, LedPWM);
+        Led.pwm_init(UVS_PWM_CHANNEL, UVS_PWM_RESOLUTION, UVS_PWM_FREQUENCY, LedPWM);
     #endif
 
     #if defined(MotorPin) && defined(MotorPWM)
-        Motor.pwm_init(0, 8, 5000, MotorPWM);
+        Motor.pwm_init(UVS_PWM_CHANNEL, UVS_PWM_RESOLUTION, UVS_PWM_FREQUENCY, MotorPWM);
     #endif
     }
 
