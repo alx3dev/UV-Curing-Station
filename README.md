@@ -1,11 +1,21 @@
-# UV Curing Station - Under Development
+# UV Curing Station - Firmware
+  
+###
 
-## About
+# v0.1.0
 
-Firmware for UV curing station for resin 3D printers. Intended to run on ESP microcontrollers (because of WiFi), but you can also use other boards supported by Arduino library (buttons are not yet implemented).  
+###
+  
+Firmware for UV curing station for resin 3D printers.  
+Intended to run on ESP microcontrollers because of WiFi, and buttons are not yet implented.  
+Other things work as they should, at least on ESP32. Going to test it on ESP8266.
+  
+##
+  
+[GUI application](https://github.com/alx3dev/Wireless-UV-Station) is still under development.  
+It's written with Fyne (in Golang), and works on Linux, Android, Windows, Mac...
 
-For ESP users, there's an [GUI app under development](https://github.com/alx3dev/Wireless-UV-Station).
-
+  
 ## Supported Options
 
  - Enable WiFi and run server if using Espressif chip,  
