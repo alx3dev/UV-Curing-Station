@@ -1,6 +1,4 @@
-#ifndef Arduino_h
-  #include <Arduino.h>
-#endif
+#include <Arduino.h>
 
 #include <config.h>
 #include <headers/station.h>
@@ -12,20 +10,20 @@ void setup()
 {
     UVS::init();
 
-#ifdef WIFI
-    UVS::server_init();
-#endif
-
-#ifdef BUTTONS
-    UVS::buttons_init();
-#endif
+    #ifdef UVS_WIFI
+      UVS::server_init();
+    #endif
 }
 
 void loop()
 {
-#ifdef WIFI
-    UVS::server.handleClient();
-#endif
+    #ifdef UVS_WIFI
+      UVS::server.handleClient();
+    #endif
+
+    #ifdef UVS_BUTTONS
+      UVS::processButtonPress();
+    #endif
 
     UVS::curingCycle();
 }

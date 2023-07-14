@@ -1,9 +1,10 @@
-#ifndef Arduino_h
-  #include <Arduino.h>
-#endif
+#ifndef UVS_OUTPUT_SWITCH_H
+#define UVS_OUTPUT_SWITCH_H
 
-// Wrap all the methods needed for output switch into a single class.
-// Support PWM (with analogWrite/ledcWrite), and timer for automatic turn-off.
+namespace UVS {
+
+// Control output switch (Led and Motor in UV Station).  
+// PWM with analogWrite/ledcWrite.  
 class OutputSwitch {
 
 private:
@@ -11,6 +12,9 @@ private:
     const uint8_t activeSignal; // HIGH or LOW
 
     float dutyCycle = 0.0f;     // GUI should care about percents.
+
+    void activate() { digitalWrite(pin, activeSignal); }
+    void deactivate() { digitalWrite(pin, !activeSignal); }
 
 public:
     bool PWM = false;       // use pwm, or full ON/OFF?
@@ -24,15 +28,15 @@ public:
     // Set PWM channel, resolution, frequency and duty cycle.
     void pwm_init(uint8_t pwm_ch, uint8_t pwm_res, uint32_t pwm_freq_hz, float pwm_dc)
     {
-    #ifdef ESP8266
-        analogWriteResolution(pwm_res);
-        analogWriteFreq(pwm_freq_hz);
-    #endif
+        #ifdef BOARD_ESP8266
+          analogWriteResolution(pwm_res);
+          analogWriteFreq(pwm_freq_hz);
+        #endif
 
-    #ifdef ESP32
-        ledcAttachPin(pin, pwm_ch);
-        ledcSetup(pwm_ch, pwm_freq_hz, pwm_res);
-    #endif
+        #ifdef BOARD_ESP32
+          ledcAttachPin(pin, pwm_ch);
+          ledcSetup(pwm_ch, pwm_freq_hz, pwm_res);
+        #endif
 
         PWM = true;
         pwm(pwm_dc);
@@ -52,7 +56,7 @@ public:
             duty = dutyCycle;
         }
 
-        #if defined(ESP32)
+        #if defined(BOARD_ESP32)
             ledcWrite(pin, duty);
         #else
             analogWrite(pin, duty);
@@ -62,13 +66,14 @@ public:
     // Call analogWrite only if PWM is enabled.
     void on()
     {
-        PWM ? pulse(dutyCycle) : digitalWrite(pin, activeSignal);
+        PWM ? pulse(dutyCycle) : activate();
     }
 
     void off()
     {
-        digitalWrite(pin, !activeSignal);
+        deactivate();
     }
 };
+} // namespace
 
-#define OutputSwitch_h
+#endif
