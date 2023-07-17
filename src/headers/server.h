@@ -99,6 +99,8 @@ void handleNotFound()
 void server_init()
 {
     WiFi.mode(UVS_WIFI_MODE);
+    WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+    WiFi.setHostname(STA_HOSTNAME);
 
     switch (UVS_WIFI_MODE) {
 
@@ -107,8 +109,8 @@ void server_init()
         while (WiFi.status() != WL_CONNECTED) { delay(100); }
 
     case WIFI_AP:
-        WiFi.softAP(AP_SSID, AP_PASS);
-
+        WiFi.softAP(AP_SSID, AP_PASS, 1, 0, 1, 100);
+    
     case WIFI_AP_STA:
         WiFi.softAP(AP_SSID, AP_PASS);
         WiFi.begin(STA_SSID, STA_PASS);
@@ -117,7 +119,7 @@ void server_init()
     case WIFI_OFF:
         return void(1);
     }
-
+    
     server.on("/", handleRoot);
     server.on("/start", handleStart);
     server.on("/update", handleUpdate);
@@ -125,7 +127,7 @@ void server_init()
     server.on("/timer-disable", handleTimerDisable);
     server.on("/timer-enable", handleTimerEnable);
 
-    server.onNotFound(handleNotFound);  
+    server.onNotFound(handleNotFound); 
     server.begin();
 }
 } // namespace

@@ -13,8 +13,9 @@
 // WiFi mode - station, access point or both (WIFI_STA, WIFI_AP, WIFI_AP_STA)
 #define UVS_WIFI_MODE   WIFI_STA
 
-const char* STA_SSID =  "ssid";     // Local network name
-const char* STA_PASS =  "pass"; // Local network password
+const char* STA_SSID =  "ssid";         // Local network name
+const char* STA_PASS =  "pass";         // Local network password
+const char* STA_HOSTNAME = "UVStation"; // Hostname
 
 const char* AP_SSID =   "";     // ESP Access Point name
 const char* AP_PASS =   "";     // ESP Access Point password
